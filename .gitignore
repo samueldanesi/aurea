@@ -1,0 +1,15 @@
+node_modules/
+.next/
+dist/
+build/
+*.log
+.env
+.env.local
+.turbo/
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+apps/engine/.venv/
+coverage/
+.pnpm-store/
