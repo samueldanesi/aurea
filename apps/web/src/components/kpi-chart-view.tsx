@@ -62,6 +62,13 @@ const TABLE_COLUMNS: Record<string, ColumnDef[]> = {
     { key: 'valore', label: 'Valore', align: 'right', format: signedEuro },
     { key: 'pct_fatturato', label: '% Fatturato', align: 'right', format: signedPct },
   ],
+  sales_reps: [
+    { key: 'venditore', label: 'Venditore' },
+    { key: 'fatturato_generato', label: 'Fatturato generato', align: 'right', format: euro },
+    { key: 'margine_generato', label: 'Margine generato', align: 'right', format: euro },
+    { key: 'provvigione_pct', label: '% Provvigione', align: 'right', format: (v) => `${v}%` },
+    { key: 'compenso', label: 'Compenso', align: 'right', format: euro },
+  ],
 };
 
 // Rows that anchor the P&L waterfall (start and end) render bold to stand out

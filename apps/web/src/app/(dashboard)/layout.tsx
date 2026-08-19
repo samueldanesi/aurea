@@ -10,6 +10,7 @@ import {
   Wrench,
   Truck,
   Wallet,
+  Users,
   LayoutGrid,
   Plug,
   BellRing,
@@ -30,6 +31,7 @@ const DASHBOARD_ICONS: Record<string, React.ElementType> = {
   'Disassemblaggio & Recupero': Wrench,
   'Logistica & Fornitori': Truck,
   'Costi Fissi': Wallet,
+  'Venditori & Provvigioni': Users,
 };
 
 interface DashboardNavItem {

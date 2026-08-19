@@ -158,6 +158,37 @@ export const kpiSeries: Record<string, Record<string, unknown>[]> = {
     { voce: 'Costi fissi', valore: -92000, pct_fatturato: -24.3 },
     { voce: 'Utile netto (EBITDA)', valore: 37300, pct_fatturato: 9.9 },
   ],
+
+  // --- Venditori & provvigioni: provvigione calcolata sul margine generato,
+  // non sul fatturato lordo, per allineare l'incentivo alla marginalità reale
+  // (lo stesso motivo per cui il canale Marketplace ha margine più basso: qui
+  // vale anche per le persone, non solo per i canali di vendita).
+  sales_team_revenue: months.map((period, i) => ({
+    period,
+    value: [204000, 198000, 221000, 235000, 227000, 282000][i],
+  })),
+  total_commissions: months.map((period, i) => ({
+    period,
+    value: [7440, 7440, 7600, 9600, 8240, 10300][i],
+  })),
+  revenue_by_sales_rep: [
+    { period: 'Marco Ferretti', value: 118000 },
+    { period: 'Elena Bianchi', value: 84000 },
+    { period: 'Davide Colombo', value: 52000 },
+    { period: 'Giulia Moretti', value: 28000 },
+  ],
+  margin_by_sales_rep: [
+    { period: 'Marco Ferretti', value: 42500 },
+    { period: 'Elena Bianchi', value: 27700 },
+    { period: 'Davide Colombo', value: 16100 },
+    { period: 'Giulia Moretti', value: 10600 },
+  ],
+  sales_reps: [
+    { venditore: 'Marco Ferretti', fatturato_generato: 118000, margine_generato: 42500, provvigione_pct: 12, compenso: 5100 },
+    { venditore: 'Elena Bianchi', fatturato_generato: 84000, margine_generato: 27700, provvigione_pct: 10, compenso: 2770 },
+    { venditore: 'Davide Colombo', fatturato_generato: 52000, margine_generato: 16100, provvigione_pct: 10, compenso: 1610 },
+    { venditore: 'Giulia Moretti', fatturato_generato: 28000, margine_generato: 10600, provvigione_pct: 8, compenso: 850 },
+  ],
 };
 
 const fiscalMonths = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
@@ -288,6 +319,20 @@ export const mockDashboards: MockDashboard[] = [
       { id: 'w-25', kind: 'table', title: 'Conto economico sintetico — Agosto', kpi_key: 'pnl_summary', span: 'wide' },
     ],
   },
+  {
+    id: 'dash-6',
+    name: 'Venditori & Provvigioni',
+    description: 'Fatturato e margine generati da ciascun venditore, e il compenso corrispondente',
+    created_at: '2026-08-19T09:00:00Z',
+    widgets: [
+      { id: 'w-26', kind: 'kpi_card', title: 'Fatturato gestito dalla rete vendita', kpi_key: 'sales_team_revenue' },
+      { id: 'w-27', kind: 'kpi_card', title: 'Provvigioni totali', kpi_key: 'total_commissions' },
+      { id: 'w-28', kind: 'line', title: 'Provvigioni totali — ultimi 6 mesi', kpi_key: 'total_commissions' },
+      { id: 'w-29', kind: 'bar', title: 'Fatturato per venditore', kpi_key: 'revenue_by_sales_rep' },
+      { id: 'w-30', kind: 'bar', title: 'Margine generato per venditore', kpi_key: 'margin_by_sales_rep' },
+      { id: 'w-31', kind: 'table', title: 'Performance e compensi venditori', kpi_key: 'sales_reps', span: 'wide' },
+    ],
+  },
 ];
 
 /** Proactive AI insights (spec 4: "generazione automatica di insight testuali
@@ -313,6 +358,10 @@ export const mockInsights: Record<string, string[]> = {
   'dash-5': [
     'L’utile netto di Agosto è €37.300 (9,9% del fatturato): i costi fissi (€92.000, soprattutto personale) assorbono il 71% del margine lordo.',
     'A Marzo e Aprile l’utile netto era vicino al pareggio (circa €4-5.000): con un fatturato più basso i costi fissi lasciano pochissimo margine reale.',
+  ],
+  'dash-6': [
+    'Marco Ferretti genera il maggior fatturato (€118.000) e il maggior margine (€42.500) del team: con una provvigione del 12% matura un compenso di €5.100 questo mese.',
+    'Le provvigioni totali (€10.300) sono circa l’8% del margine lordo mensile: uno schema calcolato sul margine, non sul fatturato, che disincentiva le vendite a basso margine.',
   ],
 };
 
@@ -396,6 +445,14 @@ export const mockAlerts: MockAlert[] = [
     kpi_key: 'on_time_delivery_pct',
     is_active: false,
     condition_label: 'Puntualità < 75%',
+    channels: ['email'],
+  },
+  {
+    id: 'alert-6',
+    name: 'Venditore sotto obiettivo',
+    kpi_key: 'sales_reps',
+    is_active: true,
+    condition_label: 'Fatturato individuale < €30.000/mese',
     channels: ['email'],
   },
 ];
