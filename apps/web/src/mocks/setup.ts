@@ -10,6 +10,7 @@ import {
   type MockConnection,
   type MockAlert,
 } from './data';
+import { buildStrategyReply, buildRegulationReply } from './strategy-regulations-data';
 
 let idCounter = 100;
 const nextId = (prefix: string) => `${prefix}-${idCounter++}`;
@@ -330,6 +331,17 @@ export function setupMocks(client: AxiosInstance) {
   });
 
   mock.onGet(/\/ai\/conversations\/[^/]+\/messages$/).reply(200, []);
+
+  // --- strategy & regulatory advisory chats (consultative, not query-grounded) ---
+  mock.onPost('/ai/strategy-chat').reply((config) => {
+    const body = JSON.parse(config.data);
+    return [200, { answer: buildStrategyReply(body.message ?? '') }];
+  });
+
+  mock.onPost('/ai/regulatory-chat').reply((config) => {
+    const body = JSON.parse(config.data);
+    return [200, { answer: buildRegulationReply(body.message ?? '') }];
+  });
 
   mock.onAny().passThrough();
 }

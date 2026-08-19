@@ -11,6 +11,8 @@ import {
   Truck,
   Wallet,
   Users,
+  Compass,
+  Scale,
   LayoutGrid,
   Plug,
   BellRing,
@@ -149,6 +151,33 @@ export default function DashboardShellLayout({ children }: { children: React.Rea
                   </Link>
                 );
               })}
+
+              <div className="my-3 h-px" style={{ background: 'var(--border)' }} />
+
+              <Link
+                href="/strategy"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
+                style={
+                  pathname?.startsWith('/strategy')
+                    ? { background: 'rgba(42,58,167,0.08)', color: 'var(--brand)', fontWeight: 500 }
+                    : { color: 'var(--text-secondary)' }
+                }
+              >
+                <Compass size={16} />
+                Strategia
+              </Link>
+              <Link
+                href="/regulations"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
+                style={
+                  pathname?.startsWith('/regulations')
+                    ? { background: 'rgba(42,58,167,0.08)', color: 'var(--brand)', fontWeight: 500 }
+                    : { color: 'var(--text-secondary)' }
+                }
+              >
+                <Scale size={16} />
+                Normative
+              </Link>
 
               <div className="my-3 h-px" style={{ background: 'var(--border)' }} />
 
