@@ -24,7 +24,18 @@ function lastValueOf(kpiKey: string): number | null {
 function buildChatReply(message: string): { answer: string; generatedSql: string | null; resultRows: unknown } {
   const lower = message.toLowerCase();
 
-  if (lower.includes('venditor') || lower.includes('commission') || lower.includes('compenso') || lower.includes('provvig')) {
+  if (
+    lower.includes('venditor') ||
+    lower.includes('commission') ||
+    lower.includes('compenso') ||
+    lower.includes('provvig') ||
+    // Named sales reps -- catches "quanto guadagna Marco Ferretti?" style questions
+    // that don't use any of the generic keywords above but do name a person.
+    lower.includes('ferretti') ||
+    lower.includes('bianchi') ||
+    lower.includes('colombo') ||
+    lower.includes('moretti')
+  ) {
     return {
       answer: 'Marco Ferretti è il top performer con €118.000 di fatturato e €42.500 di margine generato, per un compenso di €5.100 (12% del margine). Seguono Elena Bianchi (€2.770), Davide Colombo (€1.610) e Giulia Moretti (€850). Le provvigioni totali del mese sono €10.300, l\'8% circa del margine lordo aziendale.',
       generatedSql: "SELECT venditore, fatturato_generato, margine_generato, provvigione_pct, compenso FROM kpi('sales_reps') ORDER BY margine_generato DESC",
